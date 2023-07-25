@@ -21,7 +21,7 @@ def ask():
             per += 2
         elif UInp == 'no':
             per += 0
-        elif UInp == 'sometimes':
+        else:
             per += 1
     print(persona[per])
     UInp = input('Do you want to play again?')
