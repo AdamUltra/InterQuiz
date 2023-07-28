@@ -1,63 +1,84 @@
 from tkinter import *
-import time
 U = ''
+per = 0
+personality = ''
+# Personas
 persona = ['Why do you keep pushing the no word 😂', 'You are a rebel who likes to try new things',
            'You are an adventurer who don\'t fear death', 'You have a courageous character', 'You don\'t follow the herd',
            'You like living but want to change your life', 'You are brave but don\'t like adventure',
            'You don\'t care about what people say about you', 'You never stop helping your friends',
            'You care about what people say too much', 'You have a huge potential',
            'You fear darkness', 'Cheater alarm!! You keep pressing the yes button 😂']
+# Questions
+Q = ['Q.1 Do you like beaches?', 'Q.2 Do you like chocolates?', 'Q.3 Do you go cycling', 'Q.4 DO you wake up early?',
+     'Q.5 Do you go swimming?', 'Q.6 Do you watch the news?']
+
+# index variable
+ind = 0
+
+question = Q[ind]
 
 
-def entry():
-    global Answer
-    Answer = Q_entry.get()
-
-
-def Quit():
+# Terminate program
+def close():
     quit()
 
 
-def getinput():
-    textArea.insert(END, persona[per])
+win = Tk()
+width = win.winfo_screenwidth()
+height = win.winfo_screenheight()
+win.geometry("%dx%d" % (width, height))
+
+win.title(" InterQuiz by AdamUltra ")
 
 
-def ask():
-    global U
-    global per
-    per = 0
-    Q = ('Do you like beaches?', 'Do you like chocolates?', 'Do you go cycling', 'DO you wake up early?',
-         'Do you go swimming?', 'Do you have a crush 😉',)
-    entry()
-    for i in Q:
-        U = i
-        if Answer == 'yes':
-            per += 2
-        elif Answer == 'no':
-            per += 0
-        else:
-            per += 1
-    # print(persona[per])
+# Reveal Personality
+def know_personality():
+    global personality, YourPersonality
+    personality = persona[per]
+    YourPersonality = Label(win, text=f"Your personality is {personality}", font='bold')
+    YourPersonality.place(x=450, y=250)
+    YourPersonality.update()
 
 
-window = Tk()
-window.geometry("850x850")
-window.title(" InterQuiz by AdamUltra ")
-Question = Label(text="Question: {UInp}".format(UInp=U))
-Question.grid(column=0, row=1)
-Q_entry = Entry()
-Q_entry.grid(column=1, row=1)
-Persona = Label(text="Your Personality!!")
-Persona.grid(column=1, row=2)
-textArea = Text(master=window, height=10, width=25)
-textArea.grid(column=1, row=6)
-button = Button(window, text="Know personality", command=getinput, bg="pink")
-button.grid(column=3, row=5)
-button2 = Button(window, text="Quit", command=Quit, bg="red")
-button2.grid(column=3, row=4)
-answer = "Hi, let's answer some questions to know your personality \n But please don't take it seriously, it's just for fun 😀"
-textArea.insert(END, answer)
-ask()
+# Next Question
+def next_q():
+    global Question, ind, question, Input, per, entry
+    Input = str(entry.get(1.0, "end-1c"))
+    if Input == 'yes':
+        per += 2
+    elif Input == 'sometimes':
+        per += 1
+    elif Input == 'no':
+        per += 0
+    Question.destroy()
+    ind += 1
+    question = Q[ind]
+    Question = Label(win, text=f'Question is {question}', font='bold')
+    Question.place(x=350, y=150)
+    Question.update()
 
 
-window.mainloop()
+# Buttons
+QuitButton = Button(win, text="  Quit  ", command=close, bg="red", font="bold")
+QuitButton.place(x=587, y=350)
+PersonaButton = Button(win, text="Know Your Personality!!", command=know_personality, bg="blue")
+PersonaButton.place(x=550, y=300)
+NextQuestion = Button(win, text="Next Question!!", command=next_q, bg="blue")
+NextQuestion.place(x=700, y=200)
+
+# Labels
+YourPersonality = Label(win, text=f"Your personality is {personality}", font='bold')
+YourPersonality.place(x=450, y=250)
+Intro = Label(win, text="Hi, let's answer some questions to know your personality \n "
+                        "But please don't take it seriously, it's just for fun 😀", font='bold')
+Intro.pack(side='top')
+
+# Questions
+Question = Label(win, text=f'Question is {question}', font='bold')
+Question.place(x=350, y=150)
+
+# textboxes
+entry = Text(master=win, height=1, width=10)
+entry.place(x=700, y=153)
+win.mainloop()
